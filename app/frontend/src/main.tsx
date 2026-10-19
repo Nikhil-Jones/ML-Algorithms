@@ -31,7 +31,7 @@ const inkProps = {
   fill: 'none',
 };
 
-// Larger Minimal Deck Emblems for Homepage Cards
+// Minimal Deck Emblems
 const MinimalDeckEmblem = ({ category }: { category: Category }) => {
   if (category === 'regression') {
     return (
@@ -426,15 +426,13 @@ function App(){
       <section className="hero">
         <div className="hero-kicker"><span>23CSE301</span><span>·</span><span>Machine Learning Capstone</span></div>
         <h1>
-  MACHINE LEARNING
-  <br />
-  <em>Capstone Project</em>
-</h1>
+          MACHINE LEARNING
+          <br />
+          <em>Capstone Project</em>
+        </h1>
         
-        {/* Restored Divider Rule and Heading */}
         <div className="hero-rule"><span>SELECT A DECK TO BEGIN</span><span>01 — 03</span></div>
         
-        {/* Homepage Stage Layout with Enlarged Emblem Icons */}
         <div id="collection" className="deck-stage">
           {(Object.keys(deckConfig) as Category[]).map((c,i)=>(
             <button 
@@ -446,7 +444,6 @@ function App(){
               <span className="deck-grain"/>
               <span className="deck-topline">{deckConfig[c].eyebrow}</span>
               
-              {/* Scaled-up Minimal Vector Emblem */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 'auto' }}>
                 <MinimalDeckEmblem category={c} />
               </div>
@@ -467,8 +464,8 @@ function App(){
       <header className="tablebar">
         <button className="back-link" onClick={goBack}><ArrowLeft size={16}/> {selected?'BACK TO TABLE':'ALL DECKS'}</button>
         <div className="table-brand">
-  MACHINE LEARNING CAPSTONE PROJECT <span> / </span> {deckConfig[category].title.toUpperCase()}
-</div>
+          MACHINE LEARNING CAPSTONE PROJECT <span> / </span> {deckConfig[category].title.toUpperCase()}
+        </div>
         <div className="table-count">{selected?'FIELD NOTES':`${algorithms[category].length} CARDS`}</div>
       </header>
       {!selected ? (
