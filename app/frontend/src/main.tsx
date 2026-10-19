@@ -31,24 +31,54 @@ const inkProps = {
   fill: 'none',
 };
 
+// Larger Minimal Deck Emblems for Homepage Cards
+const MinimalDeckEmblem = ({ category }: { category: Category }) => {
+  if (category === 'regression') {
+    return (
+      <svg viewBox="0 0 100 100" style={{ width: '96px', height: '96px', color: '#2D2A26' }}>
+        <path d="M 12 68 Q 35 12, 50 50 T 88 32" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" />
+        <circle cx="20" cy="52" r="4" fill="currentColor" />
+        <circle cx="48" cy="52" r="4" fill="currentColor" />
+        <circle cx="80" cy="28" r="4" fill="currentColor" />
+      </svg>
+    );
+  }
+  if (category === 'classification') {
+    return (
+      <svg viewBox="0 0 100 100" style={{ width: '96px', height: '96px', color: '#2D2A26' }}>
+        <line x1="18" y1="82" x2="82" y2="18" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" />
+        <circle cx="30" cy="38" r="4.5" fill="currentColor" />
+        <circle cx="45" cy="25" r="4.5" fill="currentColor" />
+        <circle cx="58" cy="72" r="4.5" fill="none" stroke="currentColor" strokeWidth="2.2" />
+        <circle cx="72" cy="55" r="4.5" fill="none" stroke="currentColor" strokeWidth={2.2} />
+      </svg>
+    );
+  }
+  return (
+    <svg viewBox="0 0 100 100" style={{ width: '96px', height: '96px', color: '#2D2A26' }}>
+      <circle cx="35" cy="36" r="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeDasharray="3.5 3.5" />
+      <circle cx="35" cy="36" r="3.5" fill="currentColor" />
+      <circle cx="65" cy="36" r="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeDasharray="3.5 3.5" />
+      <circle cx="65" cy="36" r="3.5" fill="currentColor" />
+      <circle cx="50" cy="70" r="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeDasharray="3.5 3.5" />
+      <circle cx="50" cy="70" r="3.5" fill="currentColor" />
+    </svg>
+  );
+};
+
 const AlgorithmDiagram = ({ id, category }: { id: string; category: Category }) => {
   const normId = id.toLowerCase();
 
-  // ==========================================
   // REGRESSION DIAGRAMS
-  // ==========================================
   if (category === 'regression' || normId.includes('regressor')) {
-    // 01. LINEAR REGRESSION
     if (normId.includes('linear')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
         <path d="M 25 140 L 175 140 M 25 140 L 25 20" {...inkProps} strokeWidth={1.8} />
         <path d="M 21 26 L 25 20 L 29 26 M 169 136 L 175 140 L 169 144" fill="none" stroke="currentColor" strokeWidth={1.5} />
         <line x1="35" y1="125" x2="165" y2="35" {...inkProps} strokeWidth={2} />
-        
         <line x1="55" y1="112" x2="55" y2="92" {...inkProps} strokeDasharray="2 2" opacity={0.6} />
         <line x1="95" y1="72" x2="95" y2="90" {...inkProps} strokeDasharray="2 2" opacity={0.6} />
         <line x1="135" y1="55" x2="135" y2="38" {...inkProps} strokeDasharray="2 2" opacity={0.6} />
-        
         {[[42, 120], [55, 92], [75, 105], [95, 90], [115, 62], [135, 38], [152, 50]].map(([cx, cy], i) => (
           <circle key={i} cx={cx} cy={cy} r="2.8" fill="currentColor" />
         ))}
@@ -57,59 +87,40 @@ const AlgorithmDiagram = ({ id, category }: { id: string; category: Category }) 
       </svg>
     );
 
-    // 02. RIDGE REGRESSION (ALIGNED PERFECTLY TO CENTER ORIGIN 100,80)
     if (normId.includes('ridge')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
-        {/* L2 Circular Constraint Centered Exactly at (100, 80) */}
         <circle cx="100" cy="80" r="38" {...inkProps} strokeWidth={2} />
-        
-        {/* OLS Contours */}
         <ellipse cx="142" cy="38" rx="42" ry="22" transform="rotate(-30 142 38)" {...inkProps} strokeDasharray="2 2" opacity={0.5} />
         <ellipse cx="142" cy="38" rx="26" ry="14" transform="rotate(-30 142 38)" {...inkProps} strokeDasharray="2 2" opacity={0.7} />
         <circle cx="142" cy="38" r="2.5" fill="currentColor" />
-        
-        {/* Solution Tangency Point */}
         <circle cx="123" cy="52" r="3.5" fill="currentColor" />
-        
         <text x="62" y="75" fontSize="9" fontFamily="serif" fontStyle="italic" fill="currentColor">β₁² + β₂² ≤ t</text>
         <text x="138" y="30" fontSize="8" fontFamily="serif" fontStyle="italic" fill="currentColor">β̂_OLS</text>
         <text x="145" y="152" fontSize="9" fontFamily="serif" fontStyle="italic" fill="currentColor" opacity={0.8}>Fig 2</text>
       </svg>
     );
 
-    // 03. LASSO REGRESSION (ALIGNED PERFECTLY TO CENTER ORIGIN 100,80)
     if (normId.includes('lasso')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
-        {/* L1 Diamond Constraint Centered Exactly at (100, 80) */}
         <polygon points="100,35 145,80 100,125 55,80" {...inkProps} strokeWidth={2} />
-        
-        {/* OLS Contours */}
         <ellipse cx="145" cy="35" rx="38" ry="18" transform="rotate(-30 145 35)" {...inkProps} strokeDasharray="2 2" opacity={0.5} />
         <ellipse cx="145" cy="35" rx="22" ry="10" transform="rotate(-30 145 35)" {...inkProps} strokeDasharray="2 2" opacity={0.7} />
-        
-        {/* Corner Solution Point */}
         <circle cx="100" cy="35" r="3.5" fill="currentColor" />
         <text x="50" y="75" fontSize="9" fontFamily="serif" fontStyle="italic" fill="currentColor">|β₁| + |β₂| ≤ t</text>
         <text x="145" y="152" fontSize="9" fontFamily="serif" fontStyle="italic" fill="currentColor" opacity={0.8}>Fig 3</text>
       </svg>
     );
 
-    // 04. ELASTIC NET REGRESSION (ALIGNED PERFECTLY TO CENTER ORIGIN 100,80)
     if (normId.includes('elasticnet') || normId.includes('elastic_net')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
-        {/* Rounded Diamond Hybrid Contour Centered Exactly at (100, 80) */}
         <path d="M 100 37 Q 138 37 138 80 Q 138 123 100 123 Q 62 123 62 80 Q 62 37 100 37 Z" {...inkProps} strokeWidth={2} />
-        
-        {/* OLS Contours */}
         <ellipse cx="142" cy="37" rx="35" ry="16" transform="rotate(-28 142 37)" {...inkProps} strokeDasharray="2 2" opacity={0.5} />
         <circle cx="118" cy="53" r="3.5" fill="currentColor" />
-        
         <text x="52" y="75" fontSize="9" fontFamily="serif" fontStyle="italic" fill="currentColor">L₁ + L₂</text>
         <text x="145" y="152" fontSize="9" fontFamily="serif" fontStyle="italic" fill="currentColor" opacity={0.8}>Fig 4</text>
       </svg>
     );
 
-    // 05. POLYNOMIAL REGRESSION
     if (normId.includes('polynomial')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
         <path d="M 25 140 L 175 140 M 25 140 L 25 25" {...inkProps} strokeWidth={1.8} />
@@ -121,7 +132,6 @@ const AlgorithmDiagram = ({ id, category }: { id: string; category: Category }) 
       </svg>
     );
 
-    // 06. DECISION TREE REGRESSOR
     if (normId.includes('decisiontree') || normId.includes('decision_tree')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
         <path d="M 100 25 L 60 65 M 100 25 L 140 65 M 60 65 L 40 105 M 60 65 L 80 105 M 140 65 L 120 105 M 140 65 L 160 105" {...inkProps} strokeWidth={1.8} />
@@ -133,7 +143,6 @@ const AlgorithmDiagram = ({ id, category }: { id: string; category: Category }) 
       </svg>
     );
 
-    // 07. RANDOM FOREST REGRESSOR
     if (normId.includes('randomforest') || normId.includes('random_forest')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
         {[25, 80, 135].map((tx, idx) => (
@@ -150,7 +159,6 @@ const AlgorithmDiagram = ({ id, category }: { id: string; category: Category }) 
       </svg>
     );
 
-    // 08. GRADIENT BOOSTING REGRESSOR
     if (normId.includes('gradient') || normId.includes('boosting')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
         <path d="M 25 140 L 175 140 M 25 140 L 25 25" {...inkProps} strokeWidth={1.5} />
@@ -165,29 +173,24 @@ const AlgorithmDiagram = ({ id, category }: { id: string; category: Category }) 
       </svg>
     );
 
-    // 09. SUPPORT VECTOR REGRESSION (SVR)
     if (normId.includes('supportvector') || normId.includes('svr') || normId.includes('support_vector')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
         <path d="M 25 140 L 175 140 M 25 140 L 25 25" {...inkProps} strokeWidth={1.5} />
         <path d="M 35 120 Q 90 120, 120 70 T 165 35" {...inkProps} strokeWidth={2.2} />
         <path d="M 35 102 Q 90 102, 120 52 T 165 17" {...inkProps} strokeDasharray="3 3" />
         <path d="M 35 138 Q 90 138, 120 88 T 165 53" {...inkProps} strokeDasharray="3 3" />
-        
         <circle cx="80" cy="118" r="4.5" fill="none" stroke="currentColor" strokeWidth={1.8} />
         <circle cx="120" cy="52" r="4.5" fill="none" stroke="currentColor" strokeWidth={1.8} />
         <circle cx="145" cy="62" r="4.5" fill="none" stroke="currentColor" strokeWidth={1.8} />
-        
         {[[50, 120], [80, 118], [100, 95], [120, 52], [145, 62], [160, 32]].map(([cx, cy], i) => (
           <circle key={i} cx={cx} cy={cy} r="2.5" fill="currentColor" />
         ))}
-        
         <line x1="70" y1="102" x2="70" y2="138" {...inkProps} strokeWidth={1} />
         <text x="56" y="122" fontSize="9" fontFamily="serif" fontStyle="italic" fill="currentColor">2ε</text>
         <text x="145" y="152" fontSize="9" fontFamily="serif" fontStyle="italic" fill="currentColor" opacity={0.8}>Fig 9</text>
       </svg>
     );
 
-    // 10. K-NEAREST NEIGHBORS REGRESSOR
     if (normId.includes('knn') || normId.includes('nearest') || normId.includes('k-nearest')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
         <path d="M 25 140 L 175 140 M 25 140 L 25 25" {...inkProps} strokeWidth={1.5} />
@@ -201,17 +204,13 @@ const AlgorithmDiagram = ({ id, category }: { id: string; category: Category }) 
     );
   }
 
-  // ==========================================
   // CLASSIFICATION DIAGRAMS
-  // ==========================================
   if (category === 'classification' || normId.includes('classifier')) {
-    // 01. ADABOOST
     if (normId.includes('adaboost')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
         <rect x="25" y="30" width="150" height="100" rx="4" {...inkProps} strokeDasharray="3 3" opacity={0.4} />
         <line x1="85" y1="30" x2="85" y2="130" {...inkProps} strokeWidth={1.8} />
         <line x1="85" y1="80" x2="175" y2="80" {...inkProps} strokeWidth={1.8} />
-        
         <circle cx="50" cy="55" r="6" fill="none" stroke="currentColor" strokeWidth={2} />
         <circle cx="65" cy="100" r="3" fill="none" stroke="currentColor" strokeWidth={1.5} />
         <circle cx="120" cy="50" r="7" fill="currentColor" />
@@ -222,23 +221,19 @@ const AlgorithmDiagram = ({ id, category }: { id: string; category: Category }) 
       </svg>
     );
 
-    // 02. BAGGING CLASSIFIER
     if (normId.includes('bagging')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
         <g transform="translate(15, 20)">
           <rect x="0" y="0" width="35" height="25" rx="2" {...inkProps} />
           <rect x="0" y="38" width="35" height="25" rx="2" {...inkProps} />
           <rect x="0" y="76" width="35" height="25" rx="2" {...inkProps} />
-          
           <path d="M 35 12 L 75 25 M 35 50 L 75 50 M 35 88 L 75 75" {...inkProps} />
-          
           <circle cx="85" cy="25" r="10" fill="#E8DEC9" {...inkProps} />
           <circle cx="85" cy="50" r="10" fill="#E8DEC9" {...inkProps} />
           <circle cx="85" cy="75" r="10" fill="#E8DEC9" {...inkProps} />
           <text x="81" y="28" fontSize="8" fontFamily="sans-serif">M₁</text>
           <text x="81" y="53" fontSize="8" fontFamily="sans-serif">M₂</text>
           <text x="81" y="78" fontSize="8" fontFamily="sans-serif">M₃</text>
-          
           <path d="M 95 25 L 135 50 M 95 50 L 135 50 M 95 75 L 135 50" {...inkProps} />
           <rect x="135" y="38" width="35" height="25" rx="2" fill="currentColor" />
           <text x="140" y="53" fontSize="8" fontFamily="sans-serif" fill="#E8DEC9">Vote</text>
@@ -247,7 +242,6 @@ const AlgorithmDiagram = ({ id, category }: { id: string; category: Category }) 
       </svg>
     );
 
-    // 03. DECISION TREE CLASSIFIER
     if (normId.includes('decisiontree') || normId.includes('decision_tree')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
         <path d="M 100 25 L 60 65 M 100 25 L 140 65 M 60 65 L 40 105 M 60 65 L 80 105 M 140 65 L 120 105 M 140 65 L 160 105" {...inkProps} strokeWidth={1.8} />
@@ -259,14 +253,12 @@ const AlgorithmDiagram = ({ id, category }: { id: string; category: Category }) 
       </svg>
     );
 
-    // 04. GRADIENT BOOSTING CLASSIFIER
     if (normId.includes('gradient') || normId.includes('boosting')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
         <rect x="25" y="25" width="150" height="110" rx="4" {...inkProps} strokeWidth={1.5} />
         <line x1="25" y1="80" x2="105" y2="80" {...inkProps} strokeDasharray="3 2" opacity={0.5} />
         <line x1="105" y1="25" x2="105" y2="135" {...inkProps} strokeDasharray="3 2" opacity={0.5} />
         <path d="M 25 90 C 70 90, 105 110, 105 80 C 105 50, 140 35, 175 35" {...inkProps} strokeWidth={2.2} />
-        
         {[[45, 50], [70, 42], [65, 68], [40, 75]].map(([cx, cy], i) => (
           <circle key={i} cx={cx} cy={cy} r="3" fill="currentColor" />
         ))}
@@ -277,35 +269,29 @@ const AlgorithmDiagram = ({ id, category }: { id: string; category: Category }) 
       </svg>
     );
 
-    // 05. K-NEAREST NEIGHBORS CLASSIFIER
     if (normId.includes('knn') || normId.includes('nearest') || normId.includes('k-nearest')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
         <circle cx="100" cy="80" r="4.5" fill="currentColor" />
         <circle cx="100" cy="80" r="45" {...inkProps} strokeDasharray="3 3" strokeWidth={1.5} />
-        
         <line x1="100" y1="80" x2="70" y2="58" {...inkProps} />
         <line x1="100" y1="80" x2="132" y2="65" {...inkProps} />
         <line x1="100" y1="80" x2="90" y2="120" {...inkProps} />
-        
         {[[70, 58], [132, 65], [90, 120]].map(([cx, cy], i) => <circle key={i} cx={cx} cy={cy} r="3.5" fill="currentColor" />)}
         {[[42, 32], [152, 38], [158, 112], [48, 128], [138, 132]].map(([cx, cy], i) => <circle key={i} cx={cx} cy={cy} r="3.5" fill="#E8DEC9" stroke="currentColor" strokeWidth={1.5} />)}
         <text x="145" y="152" fontSize="9" fontFamily="serif" fontStyle="italic" fill="currentColor" opacity={0.8}>Fig 5</text>
       </svg>
     );
 
-    // 06. LOGISTIC REGRESSION (ALIGNED PERFECTLY TO CENTER ORIGIN 100,80)
     if (normId.includes('logistic')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
         <path d="M 30 130 C 80 130, 120 30, 170 30" {...inkProps} strokeWidth={2.2} />
         <line x1="25" y1="30" x2="175" y2="30" {...inkProps} strokeDasharray="2 2" opacity={0.4} />
-        
         <text x="180" y="33" fontSize="8" fontFamily="sans-serif">1.0</text>
         <text x="180" y="133" fontSize="8" fontFamily="sans-serif">0.0</text>
         <text x="145" y="152" fontSize="9" fontFamily="serif" fontStyle="italic" fill="currentColor" opacity={0.8}>Fig 6</text>
       </svg>
     );
 
-    // 07. MULTI-LAYER PERCEPTRON
     if (normId.includes('mlp') || normId.includes('perceptron') || normId.includes('multi')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
         {[35, 75, 115].map(y1 => [30, 60, 90, 120].map((y2, j) => (
@@ -323,7 +309,6 @@ const AlgorithmDiagram = ({ id, category }: { id: string; category: Category }) 
       </svg>
     );
 
-    // 08. NAIVE BAYES
     if (normId.includes('bayes') || normId.includes('naive')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
         <path d="M 30 135 Q 75 25, 120 135" {...inkProps} strokeWidth={2} />
@@ -333,7 +318,6 @@ const AlgorithmDiagram = ({ id, category }: { id: string; category: Category }) 
       </svg>
     );
 
-    // 09. RANDOM FOREST CLASSIFIER
     if (normId.includes('randomforest') || normId.includes('rfc') || normId.includes('random_forest')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
         {[25, 80, 135].map((tx, idx) => (
@@ -350,38 +334,30 @@ const AlgorithmDiagram = ({ id, category }: { id: string; category: Category }) 
       </svg>
     );
 
-    // 10. SUPPORT VECTOR CLASSIFIER
     if (normId.includes('svc') || normId.includes('supportvector')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
         <path d="M 25 140 L 175 140 M 25 140 L 25 25" {...inkProps} strokeWidth={1.5} />
         <line x1="45" y1="130" x2="155" y2="30" {...inkProps} strokeWidth={2.2} />
         <line x1="60" y1="140" x2="170" y2="40" {...inkProps} strokeDasharray="3 3" />
         <line x1="30" y1="120" x2="140" y2="20" {...inkProps} strokeDasharray="3 3" />
-        
         <circle cx="68" cy="90" r="5" fill="none" stroke="currentColor" strokeWidth={2} />
         <circle cx="102" cy="55" r="5" fill="none" stroke="currentColor" strokeWidth={2} />
         <circle cx="118" cy="70" r="5" fill="none" stroke="currentColor" strokeWidth={2} />
-        
         {[[50, 110], [42, 95], [68, 90], [118, 70]].map(([cx, cy], i) => <circle key={i} cx={cx} cy={cy} r="2.8" fill="currentColor" />)}
         {[[102, 55], [130, 45], [145, 60]].map(([cx, cy], i) => <circle key={i} cx={cx} cy={cy} r="2.8" fill="none" stroke="currentColor" strokeWidth={1.5} />)}
-        
         <text x="145" y="152" fontSize="9" fontFamily="serif" fontStyle="italic" fill="currentColor" opacity={0.8}>Fig 10</text>
       </svg>
     );
   }
 
-  // ==========================================
   // CLUSTERING DIAGRAMS
-  // ==========================================
   if (category === 'clustering' || normId.includes('cluster')) {
     if (normId.includes('kmeans') || normId.includes('k-means')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
         <circle cx="58" cy="58" r="30" {...inkProps} strokeDasharray="3 3" />
         <circle cx="142" cy="58" r="30" {...inkProps} strokeDasharray="3 3" />
         <circle cx="100" cy="118" r="30" {...inkProps} strokeDasharray="3 3" />
-        
         <path d="M 52 58 H 64 M 58 52 V 64 M 136 58 H 148 M 142 52 V 64 M 94 118 H 106 M 100 112 V 124" stroke="currentColor" strokeWidth={2} />
-        
         {[[48, 48], [66, 68], [50, 68], [134, 50], [150, 66], [140, 44], [92, 112], [108, 124], [98, 128]].map(([cx, cy], i) => (
           <circle key={i} cx={cx} cy={cy} r="2.2" fill="currentColor" />
         ))}
@@ -398,7 +374,6 @@ const AlgorithmDiagram = ({ id, category }: { id: string; category: Category }) 
     );
   }
 
-  // DEFAULT AXES
   return (
     <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228', opacity: 0.6 }}>
       <circle cx="100" cy="80" r="4" fill="currentColor" />
@@ -443,7 +418,6 @@ function App(){
       <header className="topbar">
         <div className="brand">Field Manuals <span>· Machine Learning</span></div>
         <div className="top-actions">
-          <span className="tiny-seal">✳</span>
           <button className="collection" onClick={()=>document.getElementById('collection')?.scrollIntoView({behavior:'smooth'})}>
             THE COLLECTION <ArrowUpRight size={14}/>
           </button>
@@ -451,15 +425,32 @@ function App(){
       </header>
       <section className="hero">
         <div className="hero-kicker"><span>23CSE301</span><span>·</span><span>Machine Learning Capstone</span></div>
-        <h1>ML Capstone<br/><em>Project</em></h1>
-        <p className="hero-copy">A field guide to models, methods, and the patterns they reveal.</p>
+        <h1>
+  MACHINE LEARNING
+  <br />
+  <em>Capstone Project</em>
+</h1>
+        
+        {/* Restored Divider Rule and Heading */}
         <div className="hero-rule"><span>SELECT A DECK TO BEGIN</span><span>01 — 03</span></div>
+        
+        {/* Homepage Stage Layout with Enlarged Emblem Icons */}
         <div id="collection" className="deck-stage">
           {(Object.keys(deckConfig) as Category[]).map((c,i)=>(
-            <button key={c} className={`hero-deck ${deckConfig[c].tone} deck-${i+1}`} onClick={()=>chooseDeck(c)} aria-label={`Open ${deckConfig[c].title} deck`}>
+            <button 
+              key={c} 
+              className={`hero-deck ${deckConfig[c].tone} deck-${i+1}`} 
+              onClick={()=>chooseDeck(c)} 
+              aria-label={`Open ${deckConfig[c].title} deck`}
+            >
               <span className="deck-grain"/>
               <span className="deck-topline">{deckConfig[c].eyebrow}</span>
-              <span className="deck-glyph">{deckConfig[c].symbol}</span>
+              
+              {/* Scaled-up Minimal Vector Emblem */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 'auto' }}>
+                <MinimalDeckEmblem category={c} />
+              </div>
+
               <span className="deck-name">{deckConfig[c].title}</span>
               <span className="deck-sub">{deckConfig[c].sub}</span>
               <span className="deck-index">ML / {String(i+1).padStart(2,'0')}</span>
@@ -467,6 +458,7 @@ function App(){
             </button>
           ))}
         </div>
+
         <div className="landing-foot"><span>BUILT FROM YOUR NOTEBOOKS</span><span>SCROLL / SELECT / EXPLORE</span></div>
       </section>
     </>
@@ -474,7 +466,9 @@ function App(){
     <>
       <header className="tablebar">
         <button className="back-link" onClick={goBack}><ArrowLeft size={16}/> {selected?'BACK TO TABLE':'ALL DECKS'}</button>
-        <div className="table-brand">ML CAPSTONE <span> / </span> {deckConfig[category].title.toUpperCase()}</div>
+        <div className="table-brand">
+  MACHINE LEARNING CAPSTONE PROJECT <span> / </span> {deckConfig[category].title.toUpperCase()}
+</div>
         <div className="table-count">{selected?'FIELD NOTES':`${algorithms[category].length} CARDS`}</div>
       </header>
       {!selected ? (
@@ -484,10 +478,6 @@ function App(){
               <div className="eyebrow">{deckConfig[category].eyebrow} · COLLECTION</div>
               <h2>{deckConfig[category].title}<i> deck</i></h2>
               <p>{deckConfig[category].sub}. Select any card to inspect the model.</p>
-            </div>
-            <div className="table-stamp">
-              {deckConfig[category].symbol}
-              <small>ML / {category==='regression'?'01':category==='classification'?'02':'03'}</small>
             </div>
           </div>
           <div className={`dealt-grid ${category==='clustering'?'two-cards':''}`}>
