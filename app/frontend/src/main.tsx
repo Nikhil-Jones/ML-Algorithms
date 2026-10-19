@@ -444,7 +444,7 @@ function App(){
               <span className="deck-grain"/>
               <span className="deck-topline">{deckConfig[c].eyebrow}</span>
               
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 'auto' }}>
+              <div style={{ display: 'flex', itemsAlign: 'center', justifyContent: 'center', margin: 'auto' }}>
                 <MinimalDeckEmblem category={c} />
               </div>
 
@@ -479,7 +479,12 @@ function App(){
           </div>
           <div className={`dealt-grid ${category==='clustering'?'two-cards':''}`}>
             {algorithms[category].map((a,i)=>(
-              <button key={a.id} className={`algorithm-card ${deckConfig[category].tone}`} style={{'--i':i} as React.CSSProperties} onClick={()=>openCard(a)}>
+              <button 
+                key={a.id} 
+                className={`algorithm-card ${deckConfig[category].tone}`} 
+                style={{'--i':i} as React.CSSProperties} 
+                onClick={()=>openCard(a)}
+              >
                 <div className="card-inner">
                   <div className="card-minihead">
                     <span>ML FIELD CARD</span>
@@ -518,34 +523,63 @@ function App(){
               <span>FIELD CARD / {category.toUpperCase()}</span>
               <button className="icon-button" onClick={goBack} aria-label="Close card"><X size={17}/></button>
             </div>
-            <div className={`revealed-card ${deckConfig[category].tone}`}>
-              <div className="revealed-frame">
-                <div className="reveal-top">
-                  <span>ML FIELD CARD</span>
-                  <span>NO. {String(algorithms[category].findIndex(a=>a.id===selected.id)+1).padStart(2,'0')}</span>
-                </div>
-                <div className="reveal-art">
-                  <div className="big-axis"/>
-                  
-                  <div style={{ width: '100%', height: '100%', padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>
-                    <AlgorithmDiagram id={selected.id} category={category} />
+            
+            {/* Seamless 3D Pokémon Spin Stage */}
+            <div className="pokemon-card-stage">
+              <div className={`pokemon-card-3d ${deckConfig[category].tone}`}>
+                
+                {/* Front Face (Initial Mid-Air Spin Phase) */}
+                <div className="pokemon-card-face pokemon-card-front">
+                  <div className="card-minihead">
+                    <span>ML FIELD CARD</span>
+                    <span>NO. {String(algorithms[category].findIndex(a=>a.id===selected.id)+1).padStart(2,'0')}</span>
                   </div>
-                  
-                  <div className="art-caption">MODEL STUDY · {category.toUpperCase()}</div>
+                  <div className="card-art">
+                    <div style={{ width: '100%', height: '100%', padding: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>
+                      <AlgorithmDiagram id={selected.id} category={category} />
+                    </div>
+                  </div>
+                  <div className="card-label">
+                    <span className="card-kind">{category.toUpperCase()} / MODEL</span>
+                    <strong>{selected.name}</strong>
+                  </div>
                 </div>
-                <div className="revealed-name">
-                  <small>ALGORITHM</small>
-                  <h2>{selected.name}</h2>
-                  <p>OBJECTIVE · METHOD · EVIDENCE</p>
+
+                {/* Back Face (Lands Readably Facing Forward) */}
+                <div className="pokemon-card-face pokemon-card-back">
+                  <div className="revealed-frame-oriented">
+                    <div className="reveal-top">
+                      <span>ML FIELD CARD</span>
+                      <span>NO. {String(algorithms[category].findIndex(a=>a.id===selected.id)+1).padStart(2,'0')}</span>
+                    </div>
+                    <div className="reveal-art">
+                      <div className="big-axis"/>
+                      
+                      <div style={{ width: '100%', height: '100%', padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>
+                        <AlgorithmDiagram id={selected.id} category={category} />
+                      </div>
+                      
+                      <div className="art-caption">MODEL STUDY · {category.toUpperCase()}</div>
+                    </div>
+                    <div className="revealed-name">
+                      <small>ALGORITHM</small>
+                      <h2>{selected.name}</h2>
+                      <p>OBJECTIVE · METHOD · EVIDENCE</p>
+                    </div>
+                    <div className="revealed-footer">
+                      <span>23CSE301 / ML CAPSTONE</span>
+                      <span>✳</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="revealed-footer">
-                  <span>23CSE301 / ML CAPSTONE</span>
-                  <span>✳</span>
-                </div>
+
               </div>
             </div>
+
             <div className="reveal-caption"><Sparkles size={14}/> A closer look at the method</div>
           </div>
+
+          {/* Research Report Panel */}
           <div className="detail-panel">
             <div className="detail-heading">
               <div className="eyebrow">FIELD NOTES / {selected.name.toUpperCase()}</div>
