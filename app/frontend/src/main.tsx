@@ -7,6 +7,8 @@ type Algorithm={id:string;name:string;notebook:string|null;available:boolean};
 type Output={mime:string;data:string};
 type Cell={index:number;cell_type:string;source:string;outputs:{output_type:string;data:Output[];ename?:string;evalue?:string}[]};
 type Notebook={filename:string;category:string;cells:Record<string,Cell>;cellCount:number};
+type PlaygroundField={name:string;type:'text'|'number'|'select';default:string|number;options?:string[]};
+type PlaygroundSchema={fields:PlaygroundField[];note?:string};
 
 const deckConfig={
   regression:{title:'Regression',eyebrow:'FIELD MANUAL 01',sub:'Predict continuous outcomes',tone:'ochre',symbol:'∿'},
@@ -135,9 +137,9 @@ const AlgorithmDiagram = ({ id, category }: { id: string; category: Category }) 
     if (normId.includes('decisiontree') || normId.includes('decision_tree')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
         <path d="M 100 25 L 60 65 M 100 25 L 140 65 M 60 65 L 40 105 M 60 65 L 80 105 M 140 65 L 120 105 M 140 65 L 160 105" {...inkProps} strokeWidth={1.8} />
-        <circle cx="100" cy="25" r="9" fill="#E8DEC9" {...inkProps} strokeWidth={1.8} />
-        <circle cx="60" cy="65" r="8" fill="#E8DEC9" {...inkProps} strokeWidth={1.8} />
-        <circle cx="140" cy="65" r="8" fill="#E8DEC9" {...inkProps} strokeWidth={1.8} />
+        <circle cx="100" cy="25" r="9" {...inkProps} fill="#E8DEC9" strokeWidth={1.8} />
+        <circle cx="60" cy="65" r="8" {...inkProps} fill="#E8DEC9" strokeWidth={1.8} />
+        <circle cx="140" cy="65" r="8" {...inkProps} fill="#E8DEC9" strokeWidth={1.8} />
         {[40, 80, 120, 160].map((cx, i) => <circle key={i} cx={cx} cy="105" r="5.5" fill="currentColor" />)}
         <text x="145" y="152" fontSize="9" fontFamily="serif" fontStyle="italic" fill="currentColor" opacity={0.8}>Fig 6</text>
       </svg>
@@ -148,12 +150,12 @@ const AlgorithmDiagram = ({ id, category }: { id: string; category: Category }) 
         {[25, 80, 135].map((tx, idx) => (
           <g key={idx} transform={`translate(${tx}, 25)`}>
             <path d="M 20 0 L 10 20 M 20 0 L 30 20 M 10 20 L 5 40 M 10 20 L 15 40 M 30 20 L 25 40 M 30 20 L 35 40" {...inkProps} strokeWidth={1.2} />
-            <circle cx="20" cy="0" r="3" fill="#E8DEC9" {...inkProps} />
+            <circle cx="20" cy="0" r="3" {...inkProps} fill="#E8DEC9" />
             {[5, 15, 25, 35].map((x, i) => <circle key={i} cx={x} cy="40" r="2" fill="currentColor" />)}
           </g>
         ))}
         <path d="M 45 70 Q 100 100 100 110 M 100 70 L 100 110 M 155 70 Q 100 100 100 110" {...inkProps} strokeDasharray="3 3" />
-        <circle cx="100" cy="115" r="8" fill="#E8DEC9" {...inkProps} strokeWidth={1.8} />
+        <circle cx="100" cy="115" r="8" {...inkProps} fill="#E8DEC9" strokeWidth={1.8} />
         <text x="96" y="118" fontSize="9" fontFamily="sans-serif" fontWeight="bold">∑</text>
         <text x="145" y="152" fontSize="9" fontFamily="serif" fontStyle="italic" fill="currentColor" opacity={0.8}>Fig 7</text>
       </svg>
@@ -228,9 +230,9 @@ const AlgorithmDiagram = ({ id, category }: { id: string; category: Category }) 
           <rect x="0" y="38" width="35" height="25" rx="2" {...inkProps} />
           <rect x="0" y="76" width="35" height="25" rx="2" {...inkProps} />
           <path d="M 35 12 L 75 25 M 35 50 L 75 50 M 35 88 L 75 75" {...inkProps} />
-          <circle cx="85" cy="25" r="10" fill="#E8DEC9" {...inkProps} />
-          <circle cx="85" cy="50" r="10" fill="#E8DEC9" {...inkProps} />
-          <circle cx="85" cy="75" r="10" fill="#E8DEC9" {...inkProps} />
+          <circle cx="85" cy="25" r="10" {...inkProps} fill="#E8DEC9" />
+          <circle cx="85" cy="50" r="10" {...inkProps} fill="#E8DEC9" />
+          <circle cx="85" cy="75" r="10" {...inkProps} fill="#E8DEC9" />
           <text x="81" y="28" fontSize="8" fontFamily="sans-serif">M₁</text>
           <text x="81" y="53" fontSize="8" fontFamily="sans-serif">M₂</text>
           <text x="81" y="78" fontSize="8" fontFamily="sans-serif">M₃</text>
@@ -245,9 +247,9 @@ const AlgorithmDiagram = ({ id, category }: { id: string; category: Category }) 
     if (normId.includes('decisiontree') || normId.includes('decision_tree')) return (
       <svg viewBox="0 0 200 160" style={{ width: '100%', height: '100%', color: '#3A3228' }}>
         <path d="M 100 25 L 60 65 M 100 25 L 140 65 M 60 65 L 40 105 M 60 65 L 80 105 M 140 65 L 120 105 M 140 65 L 160 105" {...inkProps} strokeWidth={1.8} />
-        <circle cx="100" cy="25" r="9" fill="#E8DEC9" {...inkProps} strokeWidth={1.8} />
-        <circle cx="60" cy="65" r="8" fill="#E8DEC9" {...inkProps} strokeWidth={1.8} />
-        <circle cx="140" cy="65" r="8" fill="#E8DEC9" {...inkProps} strokeWidth={1.8} />
+        <circle cx="100" cy="25" r="9" {...inkProps} fill="#E8DEC9" strokeWidth={1.8} />
+        <circle cx="60" cy="65" r="8" {...inkProps} fill="#E8DEC9" strokeWidth={1.8} />
+        <circle cx="140" cy="65" r="8" {...inkProps} fill="#E8DEC9" strokeWidth={1.8} />
         {[40, 80, 120, 160].map((cx, i) => <circle key={i} cx={cx} cy="105" r="5.5" fill={i % 2 === 0 ? "currentColor" : "#E8DEC9"} stroke="currentColor" strokeWidth={1.5} />)}
         <text x="145" y="152" fontSize="9" fontFamily="serif" fontStyle="italic" fill="currentColor" opacity={0.8}>Fig 3</text>
       </svg>
@@ -300,8 +302,8 @@ const AlgorithmDiagram = ({ id, category }: { id: string; category: Category }) 
         {[30, 60, 90, 120].map(y1 => [55, 95].map((y2, j) => (
           <line key={`l2-${y1}-${j}`} x1="95" y1={y1} x2="155" y2={y2} {...inkProps} opacity={0.35} />
         )))}
-        {[35, 75, 115].map((y, i) => <circle key={i} cx="35" cy={y} r="6" fill="#E8DEC9" {...inkProps} strokeWidth={1.8} />)}
-        {[30, 60, 90, 120].map((y, i) => <circle key={i} cx="95" cy={y} r="6" fill="#E8DEC9" {...inkProps} strokeWidth={1.8} />)}
+        {[35, 75, 115].map((y, i) => <circle key={i} cx="35" cy={y} r="6" {...inkProps} fill="#E8DEC9" strokeWidth={1.8} />)}
+        {[30, 60, 90, 120].map((y, i) => <circle key={i} cx="95" cy={y} r="6" {...inkProps} fill="#E8DEC9" strokeWidth={1.8} />)}
         {[55, 95].map((y, i) => <circle key={i} cx="155" cy={y} r="6" fill="currentColor" />)}
         <text x="25" y="148" fontSize="8" fontFamily="monospace">Input</text>
         <text x="80" y="148" fontSize="8" fontFamily="monospace">Hidden</text>
@@ -323,12 +325,12 @@ const AlgorithmDiagram = ({ id, category }: { id: string; category: Category }) 
         {[25, 80, 135].map((tx, idx) => (
           <g key={idx} transform={`translate(${tx}, 25)`}>
             <path d="M 20 0 L 10 20 M 20 0 L 30 20 M 10 20 L 5 40 M 10 20 L 15 40 M 30 20 L 25 40 M 30 20 L 35 40" {...inkProps} strokeWidth={1.2} />
-            <circle cx="20" cy="0" r="3" fill="#E8DEC9" {...inkProps} />
+            <circle cx="20" cy="0" r="3" {...inkProps} fill="#E8DEC9" />
             {[5, 15, 25, 35].map((x, i) => <circle key={i} cx={x} cy="40" r="2" fill={i % 2 === 0 ? "currentColor" : "#E8DEC9"} stroke="currentColor" strokeWidth={1} />)}
           </g>
         ))}
         <path d="M 45 70 Q 100 100 100 110 M 100 70 L 100 110 M 155 70 Q 100 100 100 110" {...inkProps} strokeDasharray="3 3" />
-        <circle cx="100" cy="115" r="8" fill="#E8DEC9" {...inkProps} strokeWidth={1.8} />
+        <circle cx="100" cy="115" r="8" {...inkProps} fill="#E8DEC9" strokeWidth={1.8} />
         <text x="96" y="118" fontSize="9" fontFamily="sans-serif" fontWeight="bold">∑</text>
         <text x="145" y="152" fontSize="9" fontFamily="serif" fontStyle="italic" fill="currentColor" opacity={0.8}>Fig 9</text>
       </svg>
@@ -385,9 +387,14 @@ function App(){
  const [algorithms,setAlgorithms]=useState<Record<Category,Algorithm[]>>(fallback);
  const [category,setCategory]=useState<Category|null>(null);
  const [selected,setSelected]=useState<Algorithm|null>(null);
- const [tab,setTab]=useState<'code'|'graphs'|'info'>('code');
+ const [tab,setTab]=useState<'code'|'graphs'|'info'|'playground'>('code');
  const [nb,setNb]=useState<Notebook|null>(null);
  const [info,setInfo]=useState<any>(null);
+ const [playground,setPlayground]=useState<PlaygroundSchema|null>(null);
+ const [inputs,setInputs]=useState<Record<string,string|number>>({});
+ const [prediction,setPrediction]=useState<any>(null);
+ const [predictError,setPredictError]=useState('');
+ const [predictBusy,setPredictBusy]=useState(false);
  const [busy,setBusy]=useState(false);
  const [error,setError]=useState('');
 
@@ -407,6 +414,24 @@ function App(){
   }
   fetch(`/api/info/${encodeURIComponent(selected.name)}`).then(r=>r.ok?r.json():null).then(setInfo).catch(()=>{});
  },[selected,category]);
+ useEffect(()=>{
+  if(!selected||!category)return;
+  setPlayground(null);setPrediction(null);setPredictError('');
+  fetch(`/api/playground/${category}/${encodeURIComponent(selected.id)}`)
+   .then(async r=>{const d=await r.json();if(!r.ok)throw new Error(d.detail||'Playground is unavailable');return d as PlaygroundSchema;})
+   .then(schema=>{setPlayground(schema);setInputs(Object.fromEntries(schema.fields.map(field=>[field.name,field.default])));})
+   .catch(e=>setPredictError(e.message));
+ },[selected,category]);
+
+ const runPrediction=async(e:React.FormEvent)=>{
+  e.preventDefault();if(!selected||!category)return;
+  setPredictBusy(true);setPrediction(null);setPredictError('');
+  try{
+   const response=await fetch(`/api/predict/${category}/${encodeURIComponent(selected.id)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(inputs)});
+   const data=await response.json();if(!response.ok)throw new Error(data.detail||'Prediction failed');setPrediction(data);
+  }catch(error){setPredictError(error instanceof Error?error.message:'Prediction failed');}
+  finally{setPredictBusy(false);}
+ };
 
  const chooseDeck=(c:Category)=>{setCategory(c);setSelected(null);setTab('code');};
  const goBack=()=>{if(selected){setSelected(null);setNb(null);setInfo(null);}else setCategory(null);};
@@ -444,7 +469,7 @@ function App(){
               <span className="deck-grain"/>
               <span className="deck-topline">{deckConfig[c].eyebrow}</span>
               
-              <div style={{ display: 'flex', itemsAlign: 'center', justifyContent: 'center', margin: 'auto' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 'auto' }}>
                 <MinimalDeckEmblem category={c} />
               </div>
 
@@ -590,12 +615,15 @@ function App(){
               <button className={tab==='code'?'active':''} onClick={()=>setTab('code')}><Code2 size={15}/> Code</button>
               <button className={tab==='graphs'?'active':''} onClick={()=>setTab('graphs')}><LineChart size={15}/> Graphs</button>
               <button className={tab==='info'?'active':''} onClick={()=>setTab('info')}><BookOpen size={15}/> Info</button>
+              <button className={tab==='playground'?'active':''} onClick={()=>setTab('playground')}><Sparkles size={15}/> Playground</button>
             </div>
             <div className="panel-scroll">
               {busy ? (
                 <div className="loading-state"><span className="loader"/> Reading notebook…</div>
-              ) : error && tab!=='info' ? (
+              ) : error && tab!=='info' && tab!=='playground' ? (
                 <div className="empty-state"><Database size={24}/><h3>Notebook not available</h3><p>{error}</p></div>
+              ) : tab==='playground' ? (
+                <Playground schema={playground} inputs={inputs} setInputs={setInputs} prediction={prediction} error={predictError} busy={predictBusy} onSubmit={runPrediction}/>
               ) : tab==='code' ? (
                 <>
                   <div className="section-intro">
@@ -643,6 +671,23 @@ function App(){
     </>
   )}
  </main>;
+}
+
+function Playground({schema,inputs,setInputs,prediction,error,busy,onSubmit}:{schema:PlaygroundSchema|null;inputs:Record<string,string|number>;setInputs:React.Dispatch<React.SetStateAction<Record<string,string|number>>>;prediction:any;error:string;busy:boolean;onSubmit:(e:React.FormEvent)=>void}){
+ return <div className="playground">
+  <div className="section-intro"><span>04 — TRY A NEW DATA POINT</span><p>Enter the features this exported model was trained to use. Derived features are calculated automatically.</p></div>
+  {schema?.note?<p className="playground-note">{schema.note}</p>:null}
+  {!schema&&!error?<div className="loading-state">Preparing model inputs…</div>:null}
+  {error?<div className="playground-error" role="alert">{error}</div>:null}
+  {schema?<form onSubmit={onSubmit}>
+   <div className="playground-fields">{schema.fields.map(field=><label className="playground-field" key={field.name}>
+    <span>{field.name.replace(/_/g,' ')}</span>
+    {field.type==='select'?<select value={String(inputs[field.name]??field.default)} onChange={e=>setInputs(prev=>({...prev,[field.name]:e.target.value}))}>{field.options?.map(option=><option key={option} value={option}>{option}</option>)}</select>:<input type={field.type} step={field.type==='number'?'any':undefined} value={inputs[field.name]??field.default} onChange={e=>setInputs(prev=>({...prev,[field.name]:field.type==='number'?(e.target.value===''?'':Number(e.target.value)):e.target.value}))} required/>}
+   </label>)}</div>
+   <button className="playground-submit" type="submit" disabled={busy}>{busy?'Running model…':'Run prediction'} <ArrowUpRight size={15}/></button>
+  </form>:null}
+  {prediction?<div className="prediction-result" aria-live="polite"><span>{prediction.target==='cluster'?'ASSIGNED CLUSTER':`PREDICTED ${prediction.target.toUpperCase()}`}</span><strong>{prediction.label}</strong>{typeof prediction.confidence==='number'?<small>Model confidence · {(prediction.confidence*100).toFixed(1)}%</small>:null}{prediction.note?<small>{prediction.note}</small>:null}</div>:null}
+ </div>;
 }
 
 function InfoBlock({label,value}:{label:string;value:string}){
