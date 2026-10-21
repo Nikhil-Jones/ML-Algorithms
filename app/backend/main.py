@@ -136,6 +136,13 @@ def clustering_context():
     scaler = StandardScaler().fit(agglom_features[agglom_columns])
     return preprocessor, scaler, agglom_features, agglom_columns
 
+@lru_cache(maxsize=1)
+def kmeans_context():
+    frame = pd.read_csv(DATA / "clustering" / "data.csv")
+    columns = ["Annual Income ($)", "Spending Score (1-100)"]
+    scaler = StandardScaler().fit(frame[columns])
+    return scaler, columns
+
 def playground_fields(category, algorithm_id):
     if category == "regression":
         frame = pd.read_csv(DATA / "regression" / "data.csv")
@@ -157,13 +164,13 @@ def playground_fields(category, algorithm_id):
         return fields
     if category == "clustering":
         data=pd.read_csv(DATA / "clustering" / "data.csv", keep_default_na=False)
+        if algorithm_id == "1_KmeansClustering":
+            return [
+                {"name":"Annual Income ($)","type":"number","default":float(data["Annual Income ($)"].median())},
+                {"name":"Spending Score (1-100)","type":"number","default":float(data["Spending Score (1-100)"].median())},
+            ]
         fields = [{"name":"Age","type":"number","default":float(data["Age"].median())}, {"name":"Annual Income ($)","type":"number","default":float(data["Annual Income ($)"].median())},
             {"name":"Spending Score (1-100)","type":"number","default":float(data["Spending Score (1-100)"].median())}]
-        if algorithm_id == "1_KmeansClustering":
-            fields.extend([{"name":"Work Experience","type":"number","default":float(data["Work Experience"].median())}, {"name":"Family Size","type":"number","default":float(data["Family Size"].median())}])
-            professions = ["Unknown" if value == "" else value for value in sorted(data["Profession"].unique().tolist())]
-            fields.insert(0, {"name":"Profession","type":"select","options":professions,"default":str(data["Profession"].mode().iloc[0] or "Unknown")})
-            fields.insert(0, {"name":"Gender","type":"select","options":sorted(data["Gender"].unique().tolist()),"default":str(data["Gender"].mode().iloc[0])})
         return fields
     raise HTTPException(400, "Invalid category")
 
@@ -190,6 +197,8 @@ def playground_schema(category: str, algorithm_id: str):
         "clustering":"Only the features used by this saved model are requested; unused identifiers and extra dataset columns are omitted.",
     }
     note = notes[category]
+    if category == "clustering" and algorithm_id == "1_KmeansClustering":
+        note = "The model uses annual income and spending score; other customer fields are not used for this prediction."
     if category == "clustering" and algorithm_id == "AgglomerativeClustering":
         note = "The model uses age, annual income, and spending score; unused identifiers and extra dataset columns are omitted."
     return {"category":category, "algorithm":algorithm_id, "fields":playground_fields(category, algorithm_id), "note":note}
@@ -221,10 +230,11 @@ def predict(category: str, algorithm_id: str, values: dict):
                 response["confidence"] = float(np.max(probabilities))
             return response
         if algorithm_id == "1_KmeansClustering":
-            preprocessor, _, _, _ = clustering_context()
-            sample = pd.DataFrame([values])[["Gender", "Age", "Annual Income ($)", "Spending Score (1-100)", "Profession", "Work Experience", "Family Size"]]
-            sample["Profession"] = sample["Profession"].replace({"Unknown":""})
-            label = int(model.predict(preprocessor.transform(sample))[0])
+            scaler, columns = kmeans_context()
+            missing = set(columns) - values.keys()
+            if missing: raise HTTPException(422, f"Missing inputs: {', '.join(sorted(missing))}")
+            sample = pd.DataFrame([values])[columns]
+            label = int(model.predict(scaler.transform(sample))[0])
         else:
             _, scaler, training_features, columns = clustering_context()
             labels = np.asarray(model.labels_)
