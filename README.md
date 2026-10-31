@@ -1,85 +1,77 @@
-# ML-Algorithms: Machine Learning Capstone Project
+# ML Algorithms Capstone
 
-This repository contains an end-to-end Machine Learning pipeline built for the **23CSE301 Machine Learning Capstone Project**.
+An end-to-end machine-learning capstone project with three tracks: BigMart sales regression, football player-position classification, and customer clustering. The Streamlit app hosts the existing React interface and provides access to the exported models and notebooks.
 
-The project focuses on building, evaluating, and comparing machine learning models across three tracks:
-1. **Regression Track** (BigMart Sales Prediction)
-2. **Classification Track**
-3. **Clustering Track**
+## Repository structure
 
----
-
-## 📁 Repository Structure
-
-```
-ML-Algorithms/
-├── README.md                  # Project overview, results, setup instructions
-├── requirements.txt           # Python dependencies with version specifications
+```text
+.
+├── README.md
+├── PROJECT_STORY_AND_MODEL_GUIDE.md
+├── requirements.txt
 ├── data/
-│   ├── download_data.py       # Script to load/generate BigMart Sales dataset
-│   └── Train.csv              # BigMart Sales raw dataset
-├── notebooks/
-│   ├── regression.ipynb       # Regression pipeline (EDA, preprocessing, first 5 algorithms)
-│   ├── classification.ipynb   # Classification pipeline (to be added)
-│   └── clustering.ipynb       # Clustering pipeline (to be added)
+│   ├── Train.csv
+│   ├── download_data.py
+│   ├── regression/data.csv
+│   ├── classification/classification.csv
+│   └── clustering/data.csv
 ├── models/
-│   └── regression_model.pkl   # Serialized model pipelines (.pkl via joblib)
+│   ├── regression/          # 10 exported regressors
+│   ├── classification/      # 10 exported classifiers
+│   └── clustering/          # K-Means and Agglomerative models
+├── notebooks/
+│   ├── regression/          # EDA, preprocessing, and 10 model notebooks
+│   ├── classification/      # EDA, preprocessing, and 10 model notebooks
+│   └── clustering/          # K-Means and Agglomerative analysis
 └── app/
-    └── app.py                 # Streamlit web GUI / deployment code (Bonus)
+    ├── app.py               # Streamlit host and API bridge
+    ├── requirements.txt     # Streamlit Cloud dependencies for this entrypoint
+    ├── backend/             # Prediction and notebook API logic
+    ├── normalised_notebooks/ # Notebook content displayed in the app
+    └── frontend/
+        ├── src/             # Existing React + Vite interface
+        └── dist/            # Built component served by Streamlit
 ```
 
----
+## Run locally
 
-## 📊 Dataset: BigMart Sales Prediction
+From the repository root:
 
-- **Source**: [BigMart Sales Prediction on Kaggle](https://www.kaggle.com/datasets/elahehkazemian/big-mart-sales-prediction)
-- **Target Variable**: `Item_Outlet_Sales` (Continuous Sales Prediction)
-- **Key Features**: `Item_Identifier`, `Item_Weight`, `Item_Fat_Content`, `Item_Visibility`, `Item_Type`, `Item_MRP`, `Outlet_Identifier`, `Outlet_Establishment_Year`, `Outlet_Size`, `Outlet_Location_Type`, `Outlet_Type`.
+```bash
+python -m venv .venv
+# Windows: .venv\Scripts\activate
+# macOS/Linux: source .venv/bin/activate
+pip install -r requirements.txt
+cd app/frontend
+npm ci
+npm run build
+cd ../..
+streamlit run app/app.py
+```
 
----
+The app needs the `data/`, `models/`, and `app/frontend/dist/` directories available. If you change the React source, rebuild the frontend before launching Streamlit.
 
-## 🚀 Setup Instructions
+## Deploy to Streamlit Community Cloud
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/your-username/ML-Algorithms.git
-   cd ML-Algorithms
-   ```
+- Connect the GitHub repository and select `app/app.py` as the app file.
+- Keep `app/requirements.txt`, the data and model files, and the built frontend at `app/frontend/dist/` in the deployed branch.
+- Community Cloud installs the app dependencies from `app/requirements.txt` because it sits beside the entrypoint.
 
-2. **Create a virtual environment & install dependencies**:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
+## Clustering results
 
-3. **Download / Verify Dataset**:
-   ```bash
-   python data/download_data.py
-   ```
+The table combines the K-Means result shown in the project results screenshot with the final Ward-linkage Agglomerative result recorded in its notebook. Higher Silhouette and Calinski–Harabasz scores are generally preferred; lower Davies–Bouldin is preferred.
 
-4. **Launch Jupyter Notebook**:
-   ```bash
-   jupyter notebook notebooks/regression.ipynb
-   ```
+| Algorithm | Clusters | Configuration | Silhouette Score | Davies–Bouldin Index | Calinski–Harabasz Index |
+|---|---:|---|---:|---:|---:|
+| K-Means | 4 | `n_init=100`; income and spending score (2 features) | 0.382261 | 0.809177 | 1754.813504 |
+| Agglomerative | 4 | Ward linkage; 16 preprocessed features | 0.0923 | 2.1422 | 232.41 |
 
----
+**Interpretation:** The K-Means values are from the updated two-feature candidate. The Agglomerative notebook's recorded result uses 16 features, including demographics, one-hot encoded categories, and an engineered income-to-spending ratio. Since the models use different feature spaces, their scores are not a strict like-for-like comparison. The Agglomerative notebook also compares linkage methods; its Single-linkage run has higher Silhouette and lower Davies–Bouldin scores, but very low Calinski–Harabasz and a chaining-shaped result. The table reports the notebook's selected final model, Ward linkage.
 
-## 📈 Model Performance Summary (Regression Track)
+## Models at a glance
 
-| # | Algorithm | $R^2$ Score | RMSE | MAE | 5-Fold CV $R^2$ |
-|---|-----------|-----------|------|-----|----------------|
-| 1 | Linear Regression | TBD | TBD | TBD | TBD |
-| 2 | Ridge Regression | TBD | TBD | TBD | TBD |
-| 3 | Lasso Regression | TBD | TBD | TBD | TBD |
-| 4 | ElasticNet Regression | TBD | TBD | TBD | TBD |
-| 5 | Polynomial Regression | TBD | TBD | TBD | TBD |
+- **Regression:** 10 models estimate `Item_Outlet_Sales`.
+- **Classification:** 10 models predict the football player's `position` from player and match statistics.
+- **Clustering:** K-Means and Agglomerative Clustering explore customer segments in the customer dataset.
 
----
-
-## 🛠 Tech Stack
-- **Language**: Python 3.10+
-- **Data Manipulation**: Pandas, NumPy
-- **Machine Learning**: Scikit-Learn, Joblib
-- **Visualization**: Matplotlib, Seaborn
-- **UI Framework**: Streamlit
+For the project story, preprocessing rationale, and simple model explanations, see [PROJECT_STORY_AND_MODEL_GUIDE.md](PROJECT_STORY_AND_MODEL_GUIDE.md).
